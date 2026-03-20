@@ -188,14 +188,18 @@
 
     /* ─── Hero ─── */
     .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
+      padding-top: 140px; padding-bottom: 80px;
       text-align: center;
-      overflow: hidden;
+    }
+    .hero .container {
+      position: relative;
     }
     .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
+      position: relative;
+      max-width: 1100px; margin: 0 auto;
+      border-radius: 24px; overflow: hidden;
+      aspect-ratio: 16/9;
+      box-shadow: 0 24px 64px rgba(59,53,48,0.12), 0 8px 24px rgba(59,53,48,0.06);
     }
     .hero-bg img {
       width: 100%; height: 100%; object-fit: cover; display: block;
@@ -203,16 +207,19 @@
     .hero-bg::after {
       content: '';
       position: absolute; inset: 0;
+      border-radius: 24px;
       background: linear-gradient(
         to bottom,
-        rgba(59,53,48,0.52) 0%,
-        rgba(59,53,48,0.38) 40%,
-        rgba(59,53,48,0.55) 100%
+        rgba(59,53,48,0.42) 0%,
+        rgba(59,53,48,0.28) 40%,
+        rgba(59,53,48,0.50) 100%
       );
     }
-    .hero .container {
-      position: relative; z-index: 1;
-      padding-top: 100px; padding-bottom: 80px;
+    .hero-bg-content {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2.5rem;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -266,10 +273,10 @@
     }
     .hero-stat-number {
       font-family: var(--font-display); font-size: 2rem;
-      color: #FFFFFF;
+      color: var(--warm-charcoal);
     }
     .hero-stat-label {
-      font-size: var(--fs-xs); color: rgba(255,255,255,0.55);
+      font-size: var(--fs-xs); color: var(--charcoal-muted);
       letter-spacing: 0.04em; margin-top: 0.2rem;
     }
 
@@ -876,7 +883,8 @@
       .specs-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
       .testimonials-grid { grid-template-columns: 1fr; }
-      .hero { min-height: 85vh; }
+      .hero-bg { border-radius: 16px; aspect-ratio: 4/3; }
+      .hero-bg::after { border-radius: 16px; }
       .hero-stats { gap: 2rem; }
       .cta-form { flex-direction: column; }
       .cta-banner { padding: 3.5rem 1.5rem; border-radius: 20px; }
@@ -931,16 +939,18 @@
 
 <!-- ─── Hero ─── -->
 <section class="hero">
-  <div class="hero-bg">
-    <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" loading="eager">
-  </div>
   <div class="container">
-    <div class="hero-badge reveal">Now accepting early access applications</div>
-    <h1 class="reveal">Ambient recording hardware that disappears</h1>
-    <p class="hero-sub reveal">Beautifully crafted devices that capture every conversation and connect to the AI notetaking tools you already use. No setup. No attention. Just tap and go.</p>
-    <div class="hero-actions reveal">
-      <a href="#waitlist" class="btn btn-primary btn-lg">Join the Waitlist</a>
-      <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+    <div class="hero-bg reveal">
+      <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" loading="eager">
+      <div class="hero-bg-content">
+        <div class="hero-badge">Now accepting early access applications</div>
+        <h1>Ambient recording hardware that disappears</h1>
+        <p class="hero-sub">Beautifully crafted devices that capture every conversation and connect to the AI notetaking tools you already use. No setup. No attention. Just tap and go.</p>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn btn-primary btn-lg">Join the Waitlist</a>
+          <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+        </div>
+      </div>
     </div>
     <div class="hero-stats reveal">
       <div class="hero-stat">
