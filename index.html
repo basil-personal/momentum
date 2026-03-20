@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Momentum — Ambient Recording Hardware for Teams</title>
+  <meta name="description" content="Momentum builds calm recording hardware that connects to your existing AI notetaking tools. Personal and conference-room devices in warm-sand aluminum with gesture controls and NFC.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --parchment: #F6F1EB;
+      --cream: #EDE7DF;
+      --cream-dark: #E5DDD3;
+      --sand: #D9CEBD;
+      --warm-charcoal: #3B3530;
+      --charcoal-light: #6B635A;
+      --charcoal-muted: #8A8279;
+      --amber: #C4944A;
+      --amber-soft: #D4A85C;
+      --amber-glow: rgba(196, 148, 74, 0.15);
+      --amber-dim: rgba(196, 148, 74, 0.08);
+      --white-warm: #FAF7F3;
+      --green-muted: #7A9A5C;
+
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --fs-hero: clamp(2.8rem, 5.5vw, 4.5rem);
+      --fs-h2: clamp(2rem, 3.5vw, 3rem);
+      --fs-h3: clamp(1.4rem, 2.2vw, 1.8rem);
+      --fs-body-lg: clamp(1.05rem, 1.5vw, 1.2rem);
+      --fs-body: 0.95rem;
+      --fs-small: 0.82rem;
+      --fs-xs: 0.72rem;
+      --fs-label: 0.68rem;
+
+      --max-w: 1200px;
+      --max-w-narrow: 800px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--parchment);
+      color: var(--warm-charcoal);
+      line-height: 1.65;
+      letter-spacing: 0.005em;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-size: 16px;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; opacity: 0.024;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    ::selection { background: var(--amber-glow); color: var(--warm-charcoal); }
+
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2.5rem; }
+    .container-narrow { max-width: var(--max-w-narrow); margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ─── Animations ─── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes led { 0%,100%{opacity:.4} 50%{opacity:1} }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    /* ─── Navigation ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(246,241,235,0.88);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: rgba(217,206,189,0.4);
+      box-shadow: 0 1px 12px rgba(59,53,48,0.04);
+    }
+    .nav-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--font-body);
+      font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; color: var(--warm-charcoal);
+    }
+    .nav-logo span { color: var(--amber); }
+
+    .nav-center {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-center a {
+      font-size: var(--fs-xs); font-weight: 450;
+      letter-spacing: 0.03em; color: var(--charcoal-light);
+      text-decoration: none; padding: 4px 0;
+      position: relative; transition: color 0.2s;
+    }
+    .nav-center a:hover { color: var(--warm-charcoal); }
+    .nav-center a::after {
+      content:''; position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 1px; background: var(--amber);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-center a:hover::after { transform: scaleX(1); }
+
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-right a {
+      font-size: var(--fs-xs); font-weight: 450;
+      letter-spacing: 0.03em; color: var(--charcoal-light);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-right a:hover { color: var(--warm-charcoal); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.6rem 1.6rem; border-radius: 100px;
+      font-family: var(--font-body); font-size: var(--fs-xs);
+      font-weight: 500; letter-spacing: 0.04em;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--amber); color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--amber-soft);
+      box-shadow: 0 4px 16px rgba(196,148,74,0.25);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: transparent; color: var(--warm-charcoal);
+      border: 1px solid var(--sand);
+    }
+    .btn-secondary:hover {
+      border-color: var(--charcoal-light);
+      background: rgba(59,53,48,0.03);
+    }
+    .btn-lg { padding: 0.85rem 2.2rem; font-size: var(--fs-small); }
+    .btn-sm { padding: 0.45rem 1.2rem; font-size: var(--fs-xs); }
+
+    .nav-hamburger {
+      display: none; background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .nav-hamburger span {
+      display: block; width: 18px; height: 1.5px;
+      background: var(--warm-charcoal); margin: 4px 0;
+    }
+
+    /* Mobile nav overlay */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(246,241,235,0.97);
+      -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+      flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: var(--font-display); font-size: 1.5rem;
+      color: var(--warm-charcoal); text-decoration: none;
+    }
+    .mobile-nav-close {
+      position: absolute; top: 1.2rem; right: 1.5rem;
+      background: none; border: none; font-size: 1.6rem;
+      color: var(--charcoal-light); cursor: pointer;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      padding-top: 140px; padding-bottom: 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      background: var(--amber-dim); color: var(--amber);
+      font-size: var(--fs-xs); font-weight: 500;
+      letter-spacing: 0.04em; margin-bottom: 2rem;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--amber); animation: led 3s infinite;
+    }
+    .hero h1 {
+      font-family: var(--font-display); font-size: var(--fs-hero);
+      font-weight: 400; line-height: 1.12;
+      max-width: 780px; margin: 0 auto 1.5rem;
+    }
+    .hero-sub {
+      font-size: var(--fs-body-lg); color: var(--charcoal-light);
+      font-weight: 350; max-width: 540px; margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 3.5rem;
+    }
+
+    .hero-image {
+      max-width: 960px; margin: 0 auto;
+      border-radius: 24px; overflow: hidden;
+      aspect-ratio: 16/9;
+      background: linear-gradient(145deg, #E2D1B8 0%, #D4BC96 40%, #C9AE85 70%, #D6C4A4 100%);
+      box-shadow: 0 24px 64px rgba(59,53,48,0.1), 0 4px 16px rgba(59,53,48,0.04);
+      position: relative;
+    }
+    .hero-image img, .cover-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .hero-stats {
+      display: flex; justify-content: center; gap: 4rem;
+      margin-top: 3rem; flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-number {
+      font-family: var(--font-display); font-size: 2rem;
+      color: var(--warm-charcoal);
+    }
+    .hero-stat-label {
+      font-size: var(--fs-xs); color: var(--charcoal-muted);
+      letter-spacing: 0.04em; margin-top: 0.2rem;
+    }
+
+    /* ─── Trust Bar ─── */
+    .trust-bar {
+      padding: 4rem 0; border-top: 1px solid rgba(217,206,189,0.3);
+      border-bottom: 1px solid rgba(217,206,189,0.3);
+    }
+    .trust-bar p {
+      text-align: center; font-size: var(--fs-xs);
+      color: var(--charcoal-muted); letter-spacing: 0.08em;
+      text-transform: uppercase; font-weight: 500;
+      margin-bottom: 2rem;
+    }
+    .trust-logos {
+      display: flex; justify-content: center; align-items: center;
+      gap: 3rem; flex-wrap: wrap;
+    }
+    .trust-logo {
+      font-size: 1rem; font-weight: 600; color: var(--sand);
+      letter-spacing: 0.04em; opacity: 0.7;
+    }
+
+    /* ─── Section Utilities ─── */
+    .section { padding: 6rem 0; }
+    .section-lg { padding: 8rem 0; }
+    .section-cream { background: var(--cream); }
+    .section-dark { background: var(--warm-charcoal); color: var(--cream); }
+    .section-dark .charcoal-text { color: rgba(237,231,223,0.6); }
+
+    .section-header {
+      text-align: center; max-width: 600px;
+      margin: 0 auto 4rem;
+    }
+    .section-label {
+      font-size: var(--fs-label); font-weight: 550;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 1rem;
+      display: block;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: var(--fs-h2);
+      font-weight: 400; line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      font-size: var(--fs-body); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.7;
+    }
+    .section-dark .section-desc { color: rgba(237,231,223,0.6); }
+
+    /* ─── Products ─── */
+    .products-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .product-card {
+      border-radius: 20px; overflow: hidden;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.3);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .product-card:hover {
+      box-shadow: 0 12px 40px rgba(59,53,48,0.08);
+      transform: translateY(-2px);
+    }
+    .product-card-image {
+      aspect-ratio: 16/10; overflow: hidden;
+      background: var(--cream);
+    }
+    .product-card-body { padding: 2rem; }
+    .product-card-label {
+      font-size: var(--fs-label); font-weight: 550;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 0.6rem;
+    }
+    .product-card-title {
+      font-family: var(--font-display); font-size: var(--fs-h3);
+      font-weight: 400; margin-bottom: 0.6rem;
+    }
+    .product-card-desc {
+      font-size: var(--fs-body); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.7; margin-bottom: 1.5rem;
+    }
+    .product-card-specs {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .spec-tag {
+      font-size: var(--fs-xs); color: var(--charcoal-muted);
+      background: var(--parchment); padding: 0.3rem 0.8rem;
+      border-radius: 100px; letter-spacing: 0.02em;
+    }
+
+    /* ─── Features Grid ─── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .feature-card {
+      padding: 2rem; border-radius: 16px;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.25);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      box-shadow: 0 8px 28px rgba(59,53,48,0.06);
+      transform: translateY(-2px);
+    }
+    .feature-card-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--amber-dim); display: flex;
+      align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+    .feature-card-icon svg {
+      width: 20px; height: 20px; stroke: var(--amber);
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .feature-card h3 {
+      font-family: var(--font-body); font-size: var(--fs-body);
+      font-weight: 550; margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: var(--fs-small); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.65;
+    }
+
+    /* ─── How It Works ─── */
+    .how-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; position: relative;
+    }
+    .how-step {
+      text-align: center; padding: 2rem 1.5rem;
+    }
+    .how-step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--amber);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: var(--fs-xs); font-weight: 550;
+      color: var(--amber); margin-bottom: 1.2rem;
+    }
+    .how-step-image {
+      width: 100%; aspect-ratio: 4/3; border-radius: 16px;
+      margin-bottom: 1.5rem; overflow: hidden;
+      background: var(--cream);
+    }
+    .how-step h3 {
+      font-family: var(--font-display); font-size: 1.15rem;
+      font-weight: 400; margin-bottom: 0.5rem;
+    }
+    .how-step p {
+      font-size: var(--fs-small); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.6;
+    }
+
+    /* ─── Enterprise ─── */
+    .enterprise-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .enterprise-features {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .enterprise-feature {
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .enterprise-feature-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(196,148,74,0.1); display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .enterprise-feature-icon svg {
+      width: 18px; height: 18px; stroke: var(--amber);
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .section-dark .enterprise-feature-icon {
+      background: rgba(196,148,74,0.15);
+    }
+    .enterprise-feature h4 {
+      font-size: var(--fs-body); font-weight: 550; margin-bottom: 0.25rem;
+    }
+    .enterprise-feature p {
+      font-size: var(--fs-small); color: var(--charcoal-light); font-weight: 350; line-height: 1.6;
+    }
+    .section-dark .enterprise-feature p { color: rgba(237,231,223,0.55); }
+
+    .enterprise-image {
+      aspect-ratio: 4/3; border-radius: 20px; overflow: hidden;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ─── Mobile App ─── */
+    .app-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .app-mockup {
+      display: flex; justify-content: center; gap: 1.5rem;
+    }
+    .phone-frame {
+      width: 220px; border-radius: 28px; overflow: hidden;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.3);
+      box-shadow: 0 16px 48px rgba(59,53,48,0.08);
+      padding: 12px;
+    }
+    .phone-screen {
+      border-radius: 18px; overflow: hidden;
+      background: var(--parchment);
+    }
+    .phone-status-bar {
+      padding: 8px 12px 4px; display: flex;
+      justify-content: space-between; font-size: 9px;
+      color: var(--charcoal-muted); font-weight: 500;
+    }
+    .phone-header {
+      padding: 12px 16px 8px;
+      font-family: var(--font-display);
+      font-size: 1.1rem; color: var(--warm-charcoal);
+    }
+    .phone-content { padding: 0 12px 16px; }
+    .phone-transcript-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(217,206,189,0.3);
+    }
+    .phone-transcript-item:last-child { border-bottom: none; }
+    .phone-transcript-label {
+      font-size: 8px; font-weight: 600;
+      color: var(--amber); letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 2px;
+    }
+    .phone-transcript-title {
+      font-size: 11px; font-weight: 550;
+      color: var(--warm-charcoal); margin-bottom: 2px;
+    }
+    .phone-transcript-meta {
+      font-size: 8px; color: var(--charcoal-muted);
+    }
+    .phone-transcript-preview {
+      font-size: 9px; color: var(--charcoal-light);
+      line-height: 1.5; margin-top: 4px;
+    }
+    .phone-nav {
+      display: flex; justify-content: space-around;
+      padding: 10px 0 6px;
+      border-top: 1px solid rgba(217,206,189,0.3);
+    }
+    .phone-nav-item {
+      font-size: 7px; text-align: center;
+      color: var(--charcoal-muted);
+    }
+    .phone-nav-item.active { color: var(--amber); }
+    .phone-nav-dot {
+      width: 16px; height: 16px; border-radius: 4px;
+      background: var(--cream); margin: 0 auto 3px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .phone-nav-item.active .phone-nav-dot {
+      background: var(--amber-dim);
+    }
+
+    .app-features {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .app-feature {
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .app-feature-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--amber); margin-top: 6px; flex-shrink: 0;
+    }
+    .app-feature h4 {
+      font-size: var(--fs-body); font-weight: 550; margin-bottom: 0.2rem;
+    }
+    .app-feature p {
+      font-size: var(--fs-small); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.6;
+    }
+
+    /* ─── Integrations ─── */
+    .integrations-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .integration-card {
+      padding: 1.5rem; border-radius: 14px;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.25);
+      text-align: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .integration-card:hover {
+      box-shadow: 0 6px 20px rgba(59,53,48,0.06);
+      transform: translateY(-2px);
+    }
+    .integration-card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--cream); margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.2rem;
+      color: var(--charcoal-light);
+    }
+    .integration-card h4 {
+      font-size: var(--fs-body); font-weight: 550; margin-bottom: 0.2rem;
+    }
+    .integration-card p {
+      font-size: var(--fs-xs); color: var(--charcoal-muted);
+      font-weight: 350;
+    }
+    .integration-card.coming-soon {
+      border-style: dashed; opacity: 0.6;
+    }
+
+    /* ─── Security ─── */
+    .security-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .security-card {
+      text-align: center; padding: 2.5rem 2rem;
+      border-radius: 16px;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.25);
+    }
+    .security-card-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--amber-dim); margin: 0 auto 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .security-card-icon svg {
+      width: 22px; height: 22px; stroke: var(--amber);
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .security-card h3 {
+      font-size: var(--fs-body); font-weight: 550; margin-bottom: 0.4rem;
+    }
+    .security-card p {
+      font-size: var(--fs-small); color: var(--charcoal-light);
+      font-weight: 350; line-height: 1.6;
+    }
+
+    /* ─── Specs ─── */
+    .specs-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .specs-column h3 {
+      font-family: var(--font-display); font-size: var(--fs-h3);
+      font-weight: 400; margin-bottom: 1.5rem; padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(217,206,189,0.3);
+    }
+    .spec-row {
+      display: flex; justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(217,206,189,0.15);
+      font-size: var(--fs-small);
+    }
+    .spec-key { color: var(--charcoal-muted); font-weight: 400; }
+    .spec-value { font-weight: 500; text-align: right; }
+
+    /* ─── Pricing ─── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; align-items: start;
+    }
+    .pricing-card {
+      border-radius: 20px; padding: 2.5rem 2rem;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.3);
+      text-align: center;
+      transition: box-shadow 0.3s;
+    }
+    .pricing-card:hover {
+      box-shadow: 0 8px 28px rgba(59,53,48,0.06);
+    }
+    .pricing-card.featured {
+      border-color: var(--amber);
+      box-shadow: 0 8px 32px rgba(196,148,74,0.12);
+      position: relative;
+    }
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute; top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--amber); color: #fff;
+      padding: 0.25rem 1rem; border-radius: 100px;
+      font-size: var(--fs-xs); font-weight: 550;
+      letter-spacing: 0.04em;
+    }
+    .pricing-card-name {
+      font-size: var(--fs-body); font-weight: 600;
+      letter-spacing: 0.04em; margin-bottom: 0.5rem;
+    }
+    .pricing-card-price {
+      font-family: var(--font-display); font-size: 2.4rem;
+      margin-bottom: 0.3rem;
+    }
+    .pricing-card-price span {
+      font-family: var(--font-body); font-size: var(--fs-small);
+      color: var(--charcoal-muted); font-weight: 350;
+    }
+    .pricing-card-desc {
+      font-size: var(--fs-small); color: var(--charcoal-muted);
+      margin-bottom: 2rem; line-height: 1.6;
+    }
+    .pricing-features {
+      list-style: none; text-align: left;
+      margin-bottom: 2rem;
+    }
+    .pricing-features li {
+      font-size: var(--fs-small); padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(217,206,189,0.15);
+      display: flex; align-items: center; gap: 0.6rem;
+      color: var(--charcoal-light);
+    }
+    .pricing-features li::before {
+      content: ''; width: 16px; height: 16px; border-radius: 50%;
+      background: var(--amber-dim); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 6l2 2 4-4' stroke='%23C4944A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center;
+      background-size: 12px;
+    }
+
+    /* ─── Testimonials ─── */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .testimonial-card {
+      padding: 2rem; border-radius: 16px;
+      background: var(--white-warm);
+      border: 1px solid rgba(217,206,189,0.25);
+    }
+    .testimonial-card .stars {
+      color: var(--amber); font-size: var(--fs-small);
+      margin-bottom: 1rem; letter-spacing: 2px;
+    }
+    .testimonial-card blockquote {
+      font-family: var(--font-display); font-style: italic;
+      font-size: var(--fs-body-lg); line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    .testimonial-card cite {
+      font-style: normal; font-size: var(--fs-small); display: block;
+    }
+    .testimonial-card .cite-name {
+      font-weight: 550; color: var(--warm-charcoal);
+    }
+    .testimonial-card .cite-role {
+      color: var(--charcoal-muted); font-weight: 350;
+    }
+
+    /* ─── CTA Banner ─── */
+    .cta-banner {
+      border-radius: 28px; padding: 5rem 3rem;
+      background: var(--cream); text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-banner-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: url('https://assets.lummi.ai/assets/QmfRYkduQCfYZ8Hjqcf1G1ZuDcGyF21ANmqHjHASsXUJc1') center/cover no-repeat;
+      opacity: 0.12;
+    }
+    .cta-banner > *:not(.cta-banner-bg) { position: relative; z-index: 1; }
+    .cta-banner h2 {
+      font-family: var(--font-display); font-size: var(--fs-h2);
+      font-weight: 400; margin-bottom: 1rem;
+    }
+    .cta-banner p {
+      font-size: var(--fs-body); color: var(--charcoal-light);
+      font-weight: 350; margin-bottom: 2rem;
+    }
+    .cta-form {
+      display: flex; gap: 0.7rem; max-width: 420px;
+      margin: 0 auto 0.8rem;
+    }
+    .cta-form input {
+      flex: 1; padding: 0.8rem 1.4rem; border-radius: 100px;
+      border: 1px solid var(--sand); background: var(--white-warm);
+      font-family: var(--font-body); font-size: var(--fs-small);
+      color: var(--warm-charcoal); outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .cta-form input::placeholder { color: var(--sand); }
+    .cta-form input:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px var(--amber-dim);
+    }
+    .cta-note {
+      font-size: var(--fs-xs); color: var(--charcoal-muted);
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      background: var(--warm-charcoal);
+      color: rgba(237,231,223,0.7);
+      padding: 5rem 0 0;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 3rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(237,231,223,0.08);
+    }
+    .footer-brand-col {}
+    .footer-brand-name {
+      font-family: var(--font-body);
+      font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(237,231,223,0.9); margin-bottom: 0.8rem;
+    }
+    .footer-brand-name span { color: var(--amber); }
+    .footer-brand-desc {
+      font-size: var(--fs-small); line-height: 1.7;
+      color: rgba(237,231,223,0.45); max-width: 280px;
+      margin-bottom: 1.5rem;
+    }
+    .footer-social {
+      display: flex; gap: 1rem;
+    }
+    .footer-social a {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(237,231,223,0.06);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(237,231,223,0.5); text-decoration: none;
+      font-size: 12px; transition: all 0.2s;
+    }
+    .footer-social a:hover {
+      background: rgba(237,231,223,0.1);
+      color: rgba(237,231,223,0.8);
+    }
+
+    .footer-col h4 {
+      font-size: var(--fs-xs); font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(237,231,223,0.5); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      font-size: var(--fs-small); color: rgba(237,231,223,0.55);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: rgba(237,231,223,0.9); }
+    .footer-col .badge {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 100px; background: rgba(196,148,74,0.15);
+      color: var(--amber); font-size: 9px; font-weight: 600;
+      letter-spacing: 0.04em; margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 2rem 0;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom-left {
+      font-size: var(--fs-xs); color: rgba(237,231,223,0.3);
+    }
+    .footer-bottom-right {
+      display: flex; gap: 1.5rem;
+    }
+    .footer-bottom-right a {
+      font-size: var(--fs-xs); color: rgba(237,231,223,0.3);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-bottom-right a:hover { color: rgba(237,231,223,0.6); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .integrations-grid { grid-template-columns: repeat(3, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: repeat(3, 1fr); }
+      .footer-brand-col { grid-column: span 3; }
+    }
+
+    @media (max-width: 768px) {
+      .container, .container-narrow { padding: 0 1.5rem; }
+      .nav-inner { padding: 0 1.5rem; }
+      .nav-center, .nav-right { display: none; }
+      .nav-hamburger { display: block; }
+      .section { padding: 4rem 0; }
+      .section-lg { padding: 5rem 0; }
+      .section-header { margin-bottom: 3rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .how-steps { grid-template-columns: 1fr; gap: 1.5rem; }
+      .enterprise-grid { grid-template-columns: 1fr; }
+      .enterprise-image { order: -1; }
+      .app-grid { grid-template-columns: 1fr; }
+      .app-mockup { order: -1; }
+      .integrations-grid { grid-template-columns: repeat(2, 1fr); }
+      .security-grid { grid-template-columns: 1fr; }
+      .specs-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 2rem; }
+      .hero-image { aspect-ratio: 4/3; }
+      .cta-form { flex-direction: column; }
+      .cta-banner { padding: 3.5rem 1.5rem; border-radius: 20px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand-col { grid-column: span 2; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .trust-logos { gap: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-brand-col { grid-column: span 1; }
+      .integrations-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 1rem; }
+      .phone-frame { width: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─── -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Momentum<span>.</span></a>
+    <ul class="nav-center">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#enterprise">Enterprise</a></li>
+      <li><a href="#integrations">Integrations</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#docs">Docs</a>
+      <a href="#" class="btn btn-primary btn-sm">Get Early Access</a>
+    </div>
+    <button class="nav-hamburger" onclick="document.getElementById('mobileNav').classList.add('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="this.parentElement.classList.remove('open')" aria-label="Close">&times;</button>
+  <a href="#products" onclick="this.parentElement.classList.remove('open')">Products</a>
+  <a href="#features" onclick="this.parentElement.classList.remove('open')">Features</a>
+  <a href="#enterprise" onclick="this.parentElement.classList.remove('open')">Enterprise</a>
+  <a href="#integrations" onclick="this.parentElement.classList.remove('open')">Integrations</a>
+  <a href="#pricing" onclick="this.parentElement.classList.remove('open')">Pricing</a>
+  <a href="#docs" onclick="this.parentElement.classList.remove('open')">Documentation</a>
+  <a href="#waitlist" class="btn btn-primary" onclick="this.parentElement.classList.remove('open')">Get Early Access</a>
+</div>
+
+<!-- ─── Hero ─── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge reveal">Now accepting early access applications</div>
+    <h1 class="reveal">Ambient recording hardware that disappears</h1>
+    <p class="hero-sub reveal">Beautifully crafted devices that capture every conversation and connect to the AI notetaking tools you already use. No setup. No attention. Just tap and go.</p>
+    <div class="hero-actions reveal">
+      <a href="#waitlist" class="btn btn-primary btn-lg">Join the Waitlist</a>
+      <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+    </div>
+    <div class="hero-image reveal">
+      <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" class="cover-img" loading="eager">
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hero-stat">
+        <div class="hero-stat-number">12hr</div>
+        <div class="hero-stat-label">Battery life</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">98.5%</div>
+        <div class="hero-stat-label">Transcription accuracy</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">&lt;2s</div>
+        <div class="hero-stat-label">NFC tap to transcript</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">6</div>
+        <div class="hero-stat-label">Integrations at launch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Trust Bar ─── -->
+<section class="trust-bar reveal">
+  <div class="container">
+    <p>Trusted by teams at</p>
+    <div class="trust-logos">
+      <span class="trust-logo">Stripe</span>
+      <span class="trust-logo">Figma</span>
+      <span class="trust-logo">Linear</span>
+      <span class="trust-logo">Notion</span>
+      <span class="trust-logo">Vercel</span>
+      <span class="trust-logo">Ramp</span>
+      <span class="trust-logo">Mercury</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Products ─── -->
+<section class="section-lg" id="products">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Products</span>
+      <h2 class="section-title">Two devices. One philosophy.</h2>
+      <p class="section-desc">Matte warm-sand aluminum with soft amber LED lighting. Crafted to feel invisible in any environment, from your pocket to a boardroom table.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-card-image">
+          <img src="https://www.lummi.ai/api/pro/image/b1d01660-9e45-433d-b4c1-a751a4b7902a?asset=original&cb=XB4yAk" alt="Warm workstation with ambient lighting" class="cover-img" loading="lazy">
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-label">Momentum Personal</div>
+          <h3 class="product-card-title">Always with you, never in the way</h3>
+          <p class="product-card-desc">AirPods-sized. Clips to your pocket, sits on your desk, or tucks into a bag. 12-hour battery. Always listening when you need it, invisible when you don't.</p>
+          <div class="product-card-specs">
+            <span class="spec-tag">32mm diameter</span>
+            <span class="spec-tag">8g weight</span>
+            <span class="spec-tag">12hr battery</span>
+            <span class="spec-tag">Bluetooth 5.3</span>
+          </div>
+          <a href="#specs" class="btn btn-secondary btn-sm">View Specs</a>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-card-image">
+          <img src="https://assets.lummi.ai/assets/Qmephdc6yU3cnZEUF2xXpQYavBRwMJnJoYSzYWxoTzq8vy" alt="Modern meeting room" class="cover-img" loading="lazy">
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-label">Momentum Conference</div>
+          <h3 class="product-card-title">Drop it in the room. Forget about it.</h3>
+          <p class="product-card-desc">Hockey-puck form factor with a 6-microphone array. Captures every voice in the room with natural clarity. Wakes on conversation, sleeps when the room empties.</p>
+          <div class="product-card-specs">
+            <span class="spec-tag">76mm diameter</span>
+            <span class="spec-tag">82g weight</span>
+            <span class="spec-tag">18hr battery</span>
+            <span class="spec-tag">6-mic array</span>
+          </div>
+          <a href="#specs" class="btn btn-secondary btn-sm">View Specs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Features ─── -->
+<section class="section-lg section-cream" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Designed for how you actually work</h2>
+      <p class="section-desc">Every detail considered. No learning curve, no configuration screens, no cognitive overhead.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 18s-5-2-5-7V6c0-1 1-2 3-2s3 1 3 2v5c0 5-5 7-5 7"/><path d="M12 18s5-2 5-7" /><path d="M7 10c-2 0-3-1-3-1" stroke-dasharray="2 2"/><path d="M17 10c2 0 3-1 3-1" stroke-dasharray="2 2"/></svg>
+        </div>
+        <h3>Hover-hand gesture</h3>
+        <p>Hold your hand over the device to instantly pause recording. A proximity sensor detects the gesture — no buttons, no tapping, no fumbling.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><circle cx="12" cy="12" r="2" fill="none"/><path d="M10 21h4"/></svg>
+        </div>
+        <h3>NFC tap to transcript</h3>
+        <p>Tap your phone against the device and your full transcript appears instantly. No app to open, no pairing screen, no loading spinner. Just tap and read.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" fill="none"/><circle cx="12" cy="12" r="10" fill="none" opacity="0.4"/></svg>
+        </div>
+        <h3>Always-on ambient listening</h3>
+        <p>The device is always ready. It wakes automatically when conversation begins and captures everything — no "start recording" button to remember.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="4" fill="none"/><path d="M15.5 8.5l2-2m-11 11l2-2m7 0l2 2M6.5 6.5l2 2"/></svg>
+        </div>
+        <h3>Works with existing tools</h3>
+        <p>Connects directly to Otter, Granola, Quill, and more. Your transcripts flow into the apps you already use — no proprietary ecosystem to buy into.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="none"/><path d="M3 9h18M9 3v18"/></svg>
+        </div>
+        <h3>Multi-room, multi-device</h3>
+        <p>Deploy across your office — every conference room, every huddle space. Devices sync to a single dashboard and share a unified transcript history.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Privacy-first architecture</h3>
+        <p>Audio is processed on-device and encrypted end-to-end. No raw audio is stored in the cloud. You own your data — always.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 14h4v8H4zM10 10h4v12h-4zM16 6h4v16h-4z"/></svg>
+        </div>
+        <h3>Speaker identification</h3>
+        <p>Automatically distinguishes between speakers in a conversation. Transcripts are labeled by participant, making follow-ups and action items clear.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <h3>12–18 hour battery</h3>
+        <p>The Personal lasts 12 hours, the Conference 18. Enough for a full day of meetings. USB-C fast charging gets you 4 hours in 15 minutes.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="none"/><path d="M4 12h16"/><path d="M8 4v16"/><path d="M16 4v16" opacity="0.4"/></svg>
+        </div>
+        <h3>Searchable history</h3>
+        <p>Full-text search across every conversation ever captured. Find that one thing someone said three weeks ago in seconds — no more lost context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── How It Works ─── -->
+<section class="section-lg" id="how-it-works">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Three steps. Zero learning curve.</h2>
+    </div>
+    <div class="how-steps">
+      <div class="how-step reveal">
+        <div class="how-step-image">
+          <img src="https://assets.lummi.ai/assets/QmYPscxK3wC35FqMjdBiJcaKjQQALWNd6Ate5J2BZHzpRb" alt="Soft dreamy atmosphere" class="cover-img" loading="lazy">
+        </div>
+        <div class="how-step-num">1</div>
+        <h3>Set it down</h3>
+        <p>Place the device on any surface. No pairing, no setup wizard, no companion app required. The amber LED pulses once — it's ready.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-step-image">
+          <img src="https://www.lummi.ai/api/pro/image/c5973687-a77a-4728-9531-6d9b5ee97d67?asset=original&cb=Ete9Ca&auto=format&w=1500" alt="Office scene through glass" class="cover-img" loading="lazy">
+        </div>
+        <div class="how-step-num">2</div>
+        <h3>Have your conversation</h3>
+        <p>Talk naturally. The device captures everything — multiple speakers, crosstalk, whispers — with broadcast-quality clarity. Hover your hand to pause anytime.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-step-image">
+          <img src="https://assets.lummi.ai/assets/QmaEjKVy8znZckgeJb55GFFzNYHYoFdGN52y5ECGBGAFbk" alt="Ethereal warm glow" class="cover-img" loading="lazy">
+        </div>
+        <div class="how-step-num">3</div>
+        <h3>Tap to get your transcript</h3>
+        <p>Tap your phone to the device. Your transcript appears instantly via NFC — already synced to your AI notetaking tool with summaries, action items, and highlights.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Enterprise ─── -->
+<section class="section-lg section-dark" id="enterprise">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Enterprise</span>
+      <h2 class="section-title" style="color: rgba(237,231,223,0.95)">Built for teams that move fast</h2>
+      <p class="section-desc">Momentum scales from a single device on your desk to hundreds across a global organization. Enterprise-grade security, centralized management, and deep integrations.</p>
+    </div>
+    <div class="enterprise-grid">
+      <div class="enterprise-features reveal">
+        <div class="enterprise-feature">
+          <div class="enterprise-feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <div>
+            <h4>Fleet management dashboard</h4>
+            <p>Deploy, monitor, and update every device from a single admin console. See battery levels, usage stats, and firmware status across your entire fleet.</p>
+          </div>
+        </div>
+        <div class="enterprise-feature">
+          <div class="enterprise-feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <h4>SOC 2 Type II &amp; HIPAA compliance</h4>
+            <p>End-to-end encryption, on-device audio processing, configurable data retention policies, and full audit logs. Built for regulated industries.</p>
+          </div>
+        </div>
+        <div class="enterprise-feature">
+          <div class="enterprise-feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <h4>SSO &amp; SCIM provisioning</h4>
+            <p>Connect to Okta, Azure AD, Google Workspace, or any SAML 2.0 provider. Automatic user provisioning and deprovisioning via SCIM.</p>
+          </div>
+        </div>
+        <div class="enterprise-feature">
+          <div class="enterprise-feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 14h4v8H4zM10 10h4v12h-4zM16 6h4v16h-4z"/></svg>
+          </div>
+          <div>
+            <h4>Usage analytics &amp; insights</h4>
+            <p>Understand meeting culture across your org. See total hours captured, meeting frequency, average length, and participation patterns.</p>
+          </div>
+        </div>
+        <div class="enterprise-feature">
+          <div class="enterprise-feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.22-8.56"/><path d="M21 3v6h-6"/></svg>
+          </div>
+          <div>
+            <h4>API &amp; webhook access</h4>
+            <p>Build custom workflows with our REST API. Get real-time webhook notifications when transcripts are ready, devices go offline, or battery runs low.</p>
+          </div>
+        </div>
+      </div>
+      <div class="enterprise-image reveal">
+        <img src="https://assets.lummi.ai/assets/QmYtLuD9gd8SnyM23cDGFaijpq6Fv4rzmzNjWWADegnkiF" alt="Modern office environment" class="cover-img" loading="lazy">
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem;" class="reveal">
+      <a href="#waitlist" class="btn btn-primary btn-lg">Talk to Sales</a>
+      <p style="margin-top: 1rem; font-size: var(--fs-xs); color: rgba(237,231,223,0.35);">Custom pricing for teams of 10+</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Mobile App ─── -->
+<section class="section-lg" id="app">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Mobile App</span>
+      <h2 class="section-title">Your conversations, always in your pocket</h2>
+      <p class="section-desc">The Momentum companion app gives you instant access to every transcript, search across your entire history, and share highlights with your team.</p>
+    </div>
+    <div class="app-grid">
+      <div class="app-mockup reveal">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <span>&#9679;&#9679;&#9679;</span>
+            </div>
+            <div class="phone-header">Conversations</div>
+            <div class="phone-content">
+              <div class="phone-transcript-item">
+                <div class="phone-transcript-label">Today, 2:30 PM</div>
+                <div class="phone-transcript-title">Product Roadmap Review</div>
+                <div class="phone-transcript-meta">4 participants &middot; 47 min &middot; Conference</div>
+                <div class="phone-transcript-preview">Key decision: Moving launch date to March. Sarah to finalize designs by Friday...</div>
+              </div>
+              <div class="phone-transcript-item">
+                <div class="phone-transcript-label">Today, 11:15 AM</div>
+                <div class="phone-transcript-title">1:1 with Alex</div>
+                <div class="phone-transcript-meta">2 participants &middot; 28 min &middot; Personal</div>
+                <div class="phone-transcript-preview">Performance review prep. Discussed Q1 goals and promotion timeline...</div>
+              </div>
+              <div class="phone-transcript-item">
+                <div class="phone-transcript-label">Yesterday, 4:00 PM</div>
+                <div class="phone-transcript-title">Design Critique</div>
+                <div class="phone-transcript-meta">6 participants &middot; 52 min &middot; Conference</div>
+                <div class="phone-transcript-preview">Reviewed new onboarding flow. Consensus on simplified 3-step approach...</div>
+              </div>
+              <div class="phone-transcript-item">
+                <div class="phone-transcript-label">Yesterday, 10:00 AM</div>
+                <div class="phone-transcript-title">Investor Update Call</div>
+                <div class="phone-transcript-meta">3 participants &middot; 35 min &middot; Personal</div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="phone-nav-item active">
+                <div class="phone-nav-dot"></div>
+                Home
+              </div>
+              <div class="phone-nav-item">
+                <div class="phone-nav-dot"></div>
+                Search
+              </div>
+              <div class="phone-nav-item">
+                <div class="phone-nav-dot"></div>
+                Devices
+              </div>
+              <div class="phone-nav-item">
+                <div class="phone-nav-dot"></div>
+                Settings
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-features reveal">
+        <h3 style="font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 400; margin-bottom: 2rem;">Everything you need, nothing you don't</h3>
+        <div class="app-feature">
+          <div class="app-feature-dot"></div>
+          <div>
+            <h4>Instant NFC transcripts</h4>
+            <p>Tap your phone to any Momentum device and the transcript opens immediately — fully formatted with speaker labels, timestamps, and AI-generated summaries.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-dot"></div>
+          <div>
+            <h4>Full-text search</h4>
+            <p>Search across every conversation you've ever had. Find that one thing someone said three weeks ago. Filter by date, participant, device, or keyword.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-dot"></div>
+          <div>
+            <h4>Smart highlights &amp; action items</h4>
+            <p>AI automatically surfaces decisions, action items, and key moments. Share specific highlights to Slack, email, or your project management tool.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-dot"></div>
+          <div>
+            <h4>Device management</h4>
+            <p>See battery levels, firmware status, and recording history for every Momentum device linked to your account. OTA updates happen automatically.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-dot"></div>
+          <div>
+            <h4>Available on iOS &amp; Android</h4>
+            <p>Native apps for both platforms. Optimized for speed — transcripts load in under a second. Works offline with automatic sync when reconnected.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Integrations ─── -->
+<section class="section-lg section-cream" id="integrations">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Integrations</span>
+      <h2 class="section-title">Works with everything you use</h2>
+      <p class="section-desc">Momentum connects to your existing stack. Transcripts flow automatically into your AI notetaking tools, communication platforms, and productivity apps.</p>
+    </div>
+    <div class="integrations-grid">
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">O</div>
+        <h4>Otter.ai</h4>
+        <p>AI meeting notes</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">G</div>
+        <h4>Granola</h4>
+        <p>AI notepad</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">Q</div>
+        <h4>Quill</h4>
+        <p>Meeting intelligence</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">S</div>
+        <h4>Slack</h4>
+        <p>Team messaging</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">N</div>
+        <h4>Notion</h4>
+        <p>Docs &amp; wikis</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">L</div>
+        <h4>Linear</h4>
+        <p>Issue tracking</p>
+      </div>
+      <div class="integration-card reveal">
+        <div class="integration-card-icon">Z</div>
+        <h4>Zapier</h4>
+        <p>Workflow automation</p>
+      </div>
+      <div class="integration-card reveal coming-soon">
+        <div class="integration-card-icon">+</div>
+        <h4>More coming</h4>
+        <p>API access available</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Security ─── -->
+<section class="section-lg" id="security">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Security &amp; Privacy</span>
+      <h2 class="section-title">Your conversations are yours</h2>
+      <p class="section-desc">Privacy isn't a feature — it's the architecture. Every design decision starts with the question: how do we capture less, not more?</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-card reveal">
+        <div class="security-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>End-to-end encryption</h3>
+        <p>All audio and transcripts are encrypted with AES-256 in transit and at rest. Only you and your authorized team members can access your data.</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="security-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>On-device processing</h3>
+        <p>Initial audio processing happens on the device itself. Raw audio never leaves the hardware — only encrypted, compressed transcription data is transmitted.</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="security-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>
+        </div>
+        <h3>Compliance ready</h3>
+        <p>SOC 2 Type II certified. HIPAA-eligible configuration available. GDPR-compliant data handling with configurable retention and deletion policies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Specs ─── -->
+<section class="section-lg section-cream" id="specs">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Technical Specifications</span>
+      <h2 class="section-title">The details, for those who care about details</h2>
+    </div>
+    <div class="specs-grid reveal">
+      <div class="specs-column">
+        <h3>Momentum Personal</h3>
+        <div class="spec-row"><span class="spec-key">Dimensions</span><span class="spec-value">32mm &times; 12mm</span></div>
+        <div class="spec-row"><span class="spec-key">Weight</span><span class="spec-value">8g</span></div>
+        <div class="spec-row"><span class="spec-key">Material</span><span class="spec-value">Anodized aluminum, warm sand</span></div>
+        <div class="spec-row"><span class="spec-key">Microphones</span><span class="spec-value">2 MEMS, beamforming</span></div>
+        <div class="spec-row"><span class="spec-key">Battery</span><span class="spec-value">12 hours continuous</span></div>
+        <div class="spec-row"><span class="spec-key">Charging</span><span class="spec-value">USB-C, 15 min = 4 hrs</span></div>
+        <div class="spec-row"><span class="spec-key">Connectivity</span><span class="spec-value">Bluetooth 5.3, NFC</span></div>
+        <div class="spec-row"><span class="spec-key">Sensors</span><span class="spec-value">Proximity (gesture), accelerometer</span></div>
+        <div class="spec-row"><span class="spec-key">Storage</span><span class="spec-value">32GB on-device</span></div>
+        <div class="spec-row"><span class="spec-key">LED</span><span class="spec-value">Soft amber, breathing pattern</span></div>
+        <div class="spec-row"><span class="spec-key">Water resistance</span><span class="spec-value">IPX4 splash-proof</span></div>
+      </div>
+      <div class="specs-column">
+        <h3>Momentum Conference</h3>
+        <div class="spec-row"><span class="spec-key">Dimensions</span><span class="spec-value">76mm &times; 22mm</span></div>
+        <div class="spec-row"><span class="spec-key">Weight</span><span class="spec-value">82g</span></div>
+        <div class="spec-row"><span class="spec-key">Material</span><span class="spec-value">Anodized aluminum, warm sand</span></div>
+        <div class="spec-row"><span class="spec-key">Microphones</span><span class="spec-value">6 MEMS, 360° array</span></div>
+        <div class="spec-row"><span class="spec-key">Battery</span><span class="spec-value">18 hours continuous</span></div>
+        <div class="spec-row"><span class="spec-key">Charging</span><span class="spec-value">USB-C, 15 min = 6 hrs</span></div>
+        <div class="spec-row"><span class="spec-key">Connectivity</span><span class="spec-value">Bluetooth 5.3, Wi-Fi 6, NFC</span></div>
+        <div class="spec-row"><span class="spec-key">Sensors</span><span class="spec-value">Proximity, occupancy detection</span></div>
+        <div class="spec-row"><span class="spec-key">Storage</span><span class="spec-value">64GB on-device</span></div>
+        <div class="spec-row"><span class="spec-key">LED</span><span class="spec-value">Amber ring, breathing pattern</span></div>
+        <div class="spec-row"><span class="spec-key">Range</span><span class="spec-value">Up to 8 meters / 25 feet</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Pricing ─── -->
+<section class="section-lg" id="pricing">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-desc">Hardware + software in one price. No subscriptions, no per-seat fees for core functionality. Pay once, use forever.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal">
+        <div class="pricing-card-name">Personal</div>
+        <div class="pricing-card-price">$149 <span>one-time</span></div>
+        <p class="pricing-card-desc">One Momentum Personal device with lifetime core access.</p>
+        <ul class="pricing-features">
+          <li>Momentum Personal device</li>
+          <li>Companion app (iOS &amp; Android)</li>
+          <li>NFC tap-to-transcript</li>
+          <li>Hover gesture controls</li>
+          <li>3 integration connections</li>
+          <li>90-day transcript history</li>
+          <li>Standard support</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-secondary" style="width:100%">Join Waitlist</a>
+      </div>
+      <div class="pricing-card featured reveal">
+        <div class="pricing-card-name">Team</div>
+        <div class="pricing-card-price">$399 <span>one-time</span></div>
+        <p class="pricing-card-desc">1 Conference + 2 Personal devices. Built for small teams.</p>
+        <ul class="pricing-features">
+          <li>1 Conference + 2 Personal devices</li>
+          <li>Everything in Personal</li>
+          <li>Unlimited integrations</li>
+          <li>Unlimited transcript history</li>
+          <li>Speaker identification</li>
+          <li>Shared team workspace</li>
+          <li>Priority support</li>
+          <li>API access</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-primary" style="width:100%">Join Waitlist</a>
+      </div>
+      <div class="pricing-card reveal">
+        <div class="pricing-card-name">Enterprise</div>
+        <div class="pricing-card-price">Custom</div>
+        <p class="pricing-card-desc">Fleet deployment, SSO, compliance, and dedicated support for large organizations.</p>
+        <ul class="pricing-features">
+          <li>Volume device pricing</li>
+          <li>Everything in Team</li>
+          <li>Fleet management dashboard</li>
+          <li>SSO &amp; SCIM provisioning</li>
+          <li>SOC 2 &amp; HIPAA compliance</li>
+          <li>Custom data retention</li>
+          <li>Dedicated account manager</li>
+          <li>SLA guarantee</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-secondary" style="width:100%">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Testimonials ─── -->
+<section class="section-lg section-cream">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">What People Are Saying</span>
+      <h2 class="section-title">From our early access program</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>I stopped taking notes three months ago. I've never remembered more from my conversations. It's genuinely changed how I show up in meetings.</blockquote>
+        <cite>
+          <span class="cite-name">Sarah Chen</span><br>
+          <span class="cite-role">VP Product, Series B startup</span>
+        </cite>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>The first piece of technology I've owned that actually makes a room feel calmer. We put one in every conference room — people forget they're there.</blockquote>
+        <cite>
+          <span class="cite-name">James Okafor</span><br>
+          <span class="cite-role">Design Studio Founder</span>
+        </cite>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>We evaluated every recording solution on the market. Momentum is the only one our legal team approved — the privacy architecture is genuinely different.</blockquote>
+        <cite>
+          <span class="cite-name">Rachel Torres</span><br>
+          <span class="cite-role">Head of IT, 500-person company</span>
+        </cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Documentation Preview ─── -->
+<section class="section-lg" id="docs">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Documentation</span>
+      <h2 class="section-title">Built for developers, designed for everyone</h2>
+      <p class="section-desc">Comprehensive docs, API references, and guides to help you get the most out of Momentum — whether you're setting up your first device or building a custom integration.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <h3>Getting Started Guide</h3>
+        <p>Unbox to first transcript in under 60 seconds. Step-by-step setup for Personal and Conference devices.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3>API Reference</h3>
+        <p>Full REST API documentation with authentication, endpoints, webhooks, and code samples in Python, Node, Go, and cURL.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <h3>Integration Guides</h3>
+        <p>Step-by-step tutorials for connecting Momentum to Otter, Granola, Quill, Slack, Notion, Zapier, and custom webhook endpoints.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Enterprise Deployment</h3>
+        <p>Fleet provisioning, SSO configuration, compliance setup, and network requirements for IT administrators.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>FAQ &amp; Troubleshooting</h3>
+        <p>Common questions, device troubleshooting, connectivity issues, and firmware update guides. Searchable knowledge base.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>Changelog</h3>
+        <p>Firmware releases, app updates, API changes, and new integration announcements. Subscribe for real-time notifications.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section class="section-lg" id="waitlist">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="cta-banner-bg" aria-hidden="true"></div>
+      <h2>Technology that exhales</h2>
+      <p>Join the waitlist for early access. We're shipping the first batch this spring.</p>
+      <form class="cta-form" onsubmit="event.preventDefault();var b=this.querySelector('button');b.textContent='You\u2019re on the list';b.style.background='#7A9A5C';this.querySelector('input').disabled=true;">
+        <input type="email" placeholder="you@company.com" required>
+        <button type="submit" class="btn btn-primary">Get Early Access</button>
+      </form>
+      <p class="cta-note">No spam. We'll only email when there's something worth saying.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-brand-name">Momentum<span>.</span></div>
+        <p class="footer-brand-desc">Calm recording hardware that connects to your existing AI notetaking tools. Designed in San Francisco. Assembled with care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter">X</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="GitHub">GH</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#products">Momentum Personal</a></li>
+          <li><a href="#products">Momentum Conference</a></li>
+          <li><a href="#app">Mobile App</a></li>
+          <li><a href="#specs">Technical Specs</a></li>
+          <li><a href="#">Accessories</a></li>
+          <li><a href="#">Compare Devices</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="#enterprise">For Enterprise</a></li>
+          <li><a href="#">For Startups</a></li>
+          <li><a href="#">For Education</a></li>
+          <li><a href="#">For Healthcare</a></li>
+          <li><a href="#">For Legal</a></li>
+          <li><a href="#">For Consultants</a></li>
+          <li><a href="#">For Remote Teams</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#docs">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Changelog <span class="badge">New</span></a></li>
+          <li><a href="#">System Status</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Webinars</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers <span class="badge">Hiring</span></a></li>
+          <li><a href="#">Press Kit</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">Investors</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">&copy; 2026 Momentum Technologies, Inc. All rights reserved.</div>
+      <div class="footer-bottom-right">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Security</a>
+        <a href="#">Accessibility</a>
+        <a href="#">Do Not Sell My Info</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (reduced) el.classList.add('visible');
+    else obs.observe(el);
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  let t = false;
+  window.addEventListener('scroll', () => {
+    if (!t) {
+      requestAnimationFrame(() => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+        t = false;
+      });
+      t = true;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
