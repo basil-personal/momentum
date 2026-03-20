@@ -42,7 +42,7 @@
       <div class="footer-top">
         <div class="footer-brand-col">
           <div class="footer-brand-name">Momentum<span>.</span></div>
-          <p class="footer-brand-desc">Calm recording hardware that connects to your existing AI notetaking tools. Designed in New York City. Assembled with care.</p>
+          <p class="footer-brand-desc">Shared meeting hardware that transcribes on-device and gives everyone the transcript. Designed in New York City.</p>
           <div class="footer-social">
             <a href="#" aria-label="Twitter">X</a>
             <a href="#" aria-label="LinkedIn">in</a>
