@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Status — Momentum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="shared-nav"></div>
+  <main>
+
+    <section class="page-hero reveal">
+      <div class="container">
+        <h1>System Status</h1>
+        <p style="display:inline-flex;align-items:center;gap:.5rem;font-size:1.25rem;"><span class="status-dot" style="background:#22c55e;width:12px;height:12px;border-radius:50%;display:inline-block;"></span> All Systems Operational</p>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow">
+        <h2>Services</h2>
+
+        <div class="status-row">
+          <span>API</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>NFC Services</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Transcript Processing</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Device Firmware OTA</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Mobile App (iOS)</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Mobile App (Android)</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Dashboard</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+        <div class="status-row">
+          <span>Webhooks</span>
+          <span style="display:inline-flex;align-items:center;gap:.4rem;"><span class="status-dot" style="background:#22c55e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span> Operational</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow">
+        <h2>Uptime</h2>
+        <div class="spec-row"><span class="spec-key">30-Day Uptime</span><span class="spec-value">99.98%</span></div>
+        <div class="spec-row"><span class="spec-key">Last Incident</span><span class="spec-value">February 28, 2026</span></div>
+        <div class="spec-row"><span class="spec-key">Average Response Time</span><span class="spec-value">42 ms</span></div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow prose">
+        <h2>Recent Incidents</h2>
+
+        <div class="info-card" style="margin-bottom:1.5rem;">
+          <h3>Transcript Processing Delays</h3>
+          <p><strong>February 28, 2026 &mdash; Resolved</strong></p>
+          <p>Between 14:12 and 15:47 UTC, some users experienced delays of up to 10 minutes in transcript processing. The issue was caused by a temporary spike in processing queue depth following a surge in concurrent uploads. We scaled our processing infrastructure and the backlog cleared within 30 minutes. No data was lost.</p>
+          <p><strong>Duration:</strong> 1 hour 35 minutes<br><strong>Impact:</strong> Delayed transcript delivery for approximately 12% of active users<br><strong>Root cause:</strong> Processing queue capacity exceeded during peak usage</p>
+        </div>
+
+        <div class="info-card">
+          <h3>API Intermittent 503 Errors</h3>
+          <p><strong>January 15, 2026 &mdash; Resolved</strong></p>
+          <p>Between 09:30 and 10:15 UTC, a small number of API requests returned 503 Service Unavailable errors. The issue was traced to a misconfigured load balancer rule deployed during a routine infrastructure update. The configuration was rolled back and all services returned to normal.</p>
+          <p><strong>Duration:</strong> 45 minutes<br><strong>Impact:</strong> Approximately 0.3% of API requests affected<br><strong>Root cause:</strong> Load balancer misconfiguration during maintenance</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow">
+        <div class="cta-banner">
+          <h2>Get notified about incidents</h2>
+          <p>Subscribe to status updates and receive email or SMS notifications when something changes.</p>
+          <div class="cta-form">
+            <input type="email" placeholder="you@company.com" style="padding:.75rem 1rem;font-size:1rem;border:1px solid #ccc;border-radius:8px;width:100%;max-width:320px;">
+            <a href="#" class="btn btn-primary" style="margin-left:.5rem;">Subscribe</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="shared-footer"></div>
+  <script src="../shared.js"></script>
+</body>
+</html>

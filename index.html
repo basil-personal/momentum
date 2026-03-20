@@ -7,7 +7,7 @@
   <meta name="description" content="Momentum builds calm recording hardware that connects to your existing AI notetaking tools. Personal and conference-room devices in warm-sand aluminum with gesture controls and NFC.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -26,8 +26,8 @@
       --white-warm: #FAF7F3;
       --green-muted: #7A9A5C;
 
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Inter', system-ui, sans-serif;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
       --fs-hero: clamp(2.8rem, 5.5vw, 4.5rem);
       --fs-h2: clamp(2rem, 3.5vw, 3rem);
       --fs-h3: clamp(1.4rem, 2.2vw, 1.8rem);
@@ -871,17 +871,17 @@
 <!-- ─── Navigation ─── -->
 <header class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">Momentum<span>.</span></a>
+    <a href="index.html" class="nav-logo">Momentum<span>.</span></a>
     <ul class="nav-center">
-      <li><a href="#products">Products</a></li>
+      <li><a href="products/personal.html">Products</a></li>
       <li><a href="#features">Features</a></li>
-      <li><a href="#enterprise">Enterprise</a></li>
+      <li><a href="solutions/enterprise.html">Enterprise</a></li>
       <li><a href="#integrations">Integrations</a></li>
       <li><a href="#pricing">Pricing</a></li>
     </ul>
     <div class="nav-right">
-      <a href="#docs">Docs</a>
-      <a href="#" class="btn btn-primary btn-sm">Get Early Access</a>
+      <a href="resources/docs.html">Docs</a>
+      <a href="#waitlist" class="btn btn-primary btn-sm">Get Early Access</a>
     </div>
     <button class="nav-hamburger" onclick="document.getElementById('mobileNav').classList.add('open')" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -891,12 +891,12 @@
 
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-nav-close" onclick="this.parentElement.classList.remove('open')" aria-label="Close">&times;</button>
-  <a href="#products" onclick="this.parentElement.classList.remove('open')">Products</a>
+  <a href="products/personal.html" onclick="this.parentElement.classList.remove('open')">Products</a>
   <a href="#features" onclick="this.parentElement.classList.remove('open')">Features</a>
-  <a href="#enterprise" onclick="this.parentElement.classList.remove('open')">Enterprise</a>
+  <a href="solutions/enterprise.html" onclick="this.parentElement.classList.remove('open')">Enterprise</a>
   <a href="#integrations" onclick="this.parentElement.classList.remove('open')">Integrations</a>
   <a href="#pricing" onclick="this.parentElement.classList.remove('open')">Pricing</a>
-  <a href="#docs" onclick="this.parentElement.classList.remove('open')">Documentation</a>
+  <a href="resources/docs.html" onclick="this.parentElement.classList.remove('open')">Documentation</a>
   <a href="#waitlist" class="btn btn-primary" onclick="this.parentElement.classList.remove('open')">Get Early Access</a>
 </div>
 
@@ -973,7 +973,7 @@
             <span class="spec-tag">12hr battery</span>
             <span class="spec-tag">Bluetooth 5.3</span>
           </div>
-          <a href="#specs" class="btn btn-secondary btn-sm">View Specs</a>
+          <a href="products/personal.html" class="btn btn-secondary btn-sm">View Specs</a>
         </div>
       </div>
       <div class="product-card reveal">
@@ -990,7 +990,7 @@
             <span class="spec-tag">18hr battery</span>
             <span class="spec-tag">6-mic array</span>
           </div>
-          <a href="#specs" class="btn btn-secondary btn-sm">View Specs</a>
+          <a href="products/conference.html" class="btn btn-secondary btn-sm">View Specs</a>
         </div>
       </div>
     </div>
@@ -1091,7 +1091,7 @@
       </div>
       <div class="how-step reveal">
         <div class="how-step-image">
-          <img src="https://www.lummi.ai/api/pro/image/c5973687-a77a-4728-9531-6d9b5ee97d67?asset=original&cb=Ete9Ca&auto=format&w=1500" alt="Office scene through glass" class="cover-img" loading="lazy">
+          <img src="https://assets.lummi.ai/assets/QmQBjo8Ngj44KKqn3UTNf7wsRtsUya8CbSvvnZGoNixNd9" alt="Ethereal flower closeup" class="cover-img" loading="lazy">
         </div>
         <div class="how-step-num">2</div>
         <h3>Have your conversation</h3>
@@ -1170,7 +1170,7 @@
       </div>
     </div>
     <div style="text-align: center; margin-top: 3rem;" class="reveal">
-      <a href="#waitlist" class="btn btn-primary btn-lg">Talk to Sales</a>
+      <a href="company/contact.html" class="btn btn-primary btn-lg">Talk to Sales</a>
       <p style="margin-top: 1rem; font-size: var(--fs-xs); color: rgba(237,231,223,0.35);">Custom pricing for teams of 10+</p>
     </div>
   </div>
@@ -1592,60 +1592,60 @@
       <div class="footer-col">
         <h4>Products</h4>
         <ul>
-          <li><a href="#products">Momentum Personal</a></li>
-          <li><a href="#products">Momentum Conference</a></li>
-          <li><a href="#app">Mobile App</a></li>
+          <li><a href="products/personal.html">Momentum Personal</a></li>
+          <li><a href="products/conference.html">Momentum Conference</a></li>
+          <li><a href="products/app.html">Mobile App</a></li>
           <li><a href="#specs">Technical Specs</a></li>
-          <li><a href="#">Accessories</a></li>
-          <li><a href="#">Compare Devices</a></li>
+          <li><a href="products/accessories.html">Accessories</a></li>
+          <li><a href="products/compare.html">Compare Devices</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Solutions</h4>
         <ul>
-          <li><a href="#enterprise">For Enterprise</a></li>
-          <li><a href="#">For Startups</a></li>
-          <li><a href="#">For Education</a></li>
-          <li><a href="#">For Healthcare</a></li>
-          <li><a href="#">For Legal</a></li>
-          <li><a href="#">For Consultants</a></li>
-          <li><a href="#">For Remote Teams</a></li>
+          <li><a href="solutions/enterprise.html">For Enterprise</a></li>
+          <li><a href="solutions/startups.html">For Startups</a></li>
+          <li><a href="solutions/education.html">For Education</a></li>
+          <li><a href="solutions/healthcare.html">For Healthcare</a></li>
+          <li><a href="solutions/legal.html">For Legal</a></li>
+          <li><a href="solutions/consultants.html">For Consultants</a></li>
+          <li><a href="solutions/remote-teams.html">For Remote Teams</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
-          <li><a href="#docs">Documentation</a></li>
-          <li><a href="#">API Reference</a></li>
-          <li><a href="#">Help Center</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Changelog <span class="badge">New</span></a></li>
-          <li><a href="#">System Status</a></li>
-          <li><a href="#">Community</a></li>
-          <li><a href="#">Webinars</a></li>
+          <li><a href="resources/docs.html">Documentation</a></li>
+          <li><a href="resources/api.html">API Reference</a></li>
+          <li><a href="resources/help.html">Help Center</a></li>
+          <li><a href="resources/blog.html">Blog</a></li>
+          <li><a href="resources/changelog.html">Changelog <span class="badge">New</span></a></li>
+          <li><a href="resources/status.html">System Status</a></li>
+          <li><a href="resources/community.html">Community</a></li>
+          <li><a href="resources/webinars.html">Webinars</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Careers <span class="badge">Hiring</span></a></li>
-          <li><a href="#">Press Kit</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Partners</a></li>
-          <li><a href="#">Investors</a></li>
+          <li><a href="company/about.html">About</a></li>
+          <li><a href="company/careers.html">Careers <span class="badge">Hiring</span></a></li>
+          <li><a href="company/press.html">Press Kit</a></li>
+          <li><a href="company/contact.html">Contact</a></li>
+          <li><a href="company/partners.html">Partners</a></li>
+          <li><a href="company/investors.html">Investors</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-left">&copy; 2026 Momentum Technologies, Inc. All rights reserved.</div>
       <div class="footer-bottom-right">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a>
-        <a href="#">Security</a>
-        <a href="#">Accessibility</a>
-        <a href="#">Do Not Sell My Info</a>
+        <a href="legal/privacy.html">Privacy Policy</a>
+        <a href="legal/terms.html">Terms of Service</a>
+        <a href="legal/cookies.html">Cookie Policy</a>
+        <a href="legal/security.html">Security</a>
+        <a href="legal/accessibility.html">Accessibility</a>
+        <a href="legal/do-not-sell.html">Do Not Sell My Info</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog — Momentum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="shared-nav"></div>
+  <main>
+
+    <section class="page-hero reveal">
+      <div class="page-hero-bg" style="background-image:url('https://assets.lummi.ai/assets/QmfRYkduQCfYZ8Hjqcf1G1ZuDcGyF21ANmqHjHASsXUJc1')"></div>
+      <div class="container">
+        <h1>Changelog</h1>
+        <p>A complete history of firmware, app, and API updates. We ship improvements every month.</p>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow">
+
+        <div class="timeline-item">
+          <div class="timeline-date">March 5, 2026</div>
+          <div class="timeline-title">v1.4.0</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> Added support for Mandarin Chinese transcription. Improved noise cancellation algorithm for open-plan offices. Reduced power consumption during idle state by 15%.</p>
+            <p><strong>App:</strong> New timeline view for browsing transcripts by date. Added ability to merge related transcripts from the same meeting. Dark mode now follows system preference automatically.</p>
+            <p><strong>API:</strong> New <code>GET /transcripts/:id/highlights</code> endpoint returns only the highlighted moments from a transcript. Added <code>language</code> filter parameter to <code>GET /transcripts</code>.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">February 14, 2026</div>
+          <div class="timeline-title">v1.3.2</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> Hotfix for Bluetooth reconnection issue affecting some Android 14 devices. Resolved rare crash during extended recording sessions exceeding 8 hours.</p>
+            <p><strong>App:</strong> Fixed search results not displaying speaker labels correctly. Improved transcript loading speed by 40% for accounts with more than 500 recordings.</p>
+            <p><strong>API:</strong> Fixed pagination offset error on <code>GET /webhooks</code>. Improved error messages for invalid API key formats.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">January 22, 2026</div>
+          <div class="timeline-title">v1.3.0</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> Introduced gesture controls: double-tap to bookmark, long-press to pause, triple-tap to mark private. Added proximity sensor wake for Momentum Personal.</p>
+            <p><strong>App:</strong> Launched smart highlights powered by on-device ML. Added Notion integration for automatic meeting note export. New onboarding flow for first-time users.</p>
+            <p><strong>API:</strong> Added <code>POST /webhooks</code> and <code>DELETE /webhooks/:id</code> endpoints. Webhook payloads now include speaker count and duration metadata.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">December 10, 2025</div>
+          <div class="timeline-title">v1.2.1</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> Stability improvements for Conference Wi-Fi connectivity. Fixed LED ring brightness not respecting configured settings after firmware update.</p>
+            <p><strong>App:</strong> Resolved issue where offline transcripts were not syncing after reconnecting to Wi-Fi. Added pull-to-refresh on transcript list.</p>
+            <p><strong>API:</strong> Increased default pagination limit from 10 to 20 items per page. Added <code>device_id</code> filter to <code>GET /transcripts</code>.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">November 18, 2025</div>
+          <div class="timeline-title">v1.2.0</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> Added occupancy detection for Momentum Conference. Introduced automatic recording start and stop based on room presence. Improved microphone array calibration on first setup.</p>
+            <p><strong>App:</strong> New device management screen with battery, firmware, and storage indicators. Added Slack integration for sharing transcript highlights. Introduced team directory for automatic speaker naming.</p>
+            <p><strong>API:</strong> Launched <code>GET /devices</code> and <code>POST /devices/:id/config</code> endpoints. API keys can now be scoped to read-only or full access.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">October 8, 2025</div>
+          <div class="timeline-title">v1.1.0</div>
+          <div class="timeline-desc">
+            <p><strong>Firmware:</strong> First major update. Added support for French, German, and Portuguese transcription. Improved battery life by 10% through optimised audio encoding. NFC pairing now works with iOS 16 devices.</p>
+            <p><strong>App:</strong> Launched natural language search across all transcripts. Added speaker identification and voice profile management. New settings screen for recording quality and sync preferences.</p>
+            <p><strong>API:</strong> Initial public API release with <code>GET /transcripts</code> and <code>GET /transcripts/:id</code> endpoints. API key management available in the dashboard.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow">
+        <div class="cta-banner">
+          <h2>Want early access to new features?</h2>
+          <p>Join the Momentum beta programme and test new firmware and app features before they ship to everyone.</p>
+          <a href="#" class="btn btn-primary">Join the Beta</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="shared-footer"></div>
+  <script src="../shared.js"></script>
+</body>
+</html>

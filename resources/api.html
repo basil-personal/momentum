@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference — Momentum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="shared-nav"></div>
+  <main>
+
+    <section class="page-hero reveal">
+      <div class="page-hero-bg" style="background-image:url('https://assets.lummi.ai/assets/QmfRYkduQCfYZ8Hjqcf1G1ZuDcGyF21ANmqHjHASsXUJc1')"></div>
+      <div class="container">
+        <h1>API Reference</h1>
+        <p>Build on Momentum. Access transcripts, manage devices, and integrate conversation intelligence into your own tools.</p>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow prose">
+        <h2>Overview</h2>
+        <p>The Momentum REST API gives you programmatic access to your transcripts, devices, and account data. All endpoints return JSON and follow standard HTTP conventions. The base URL for all requests is:</p>
+        <pre><code>https://api.momentum.dev/v1</code></pre>
+        <p>All requests must be made over HTTPS. HTTP requests will be rejected.</p>
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow prose">
+        <h2>Authentication</h2>
+        <p>Authenticate every request by including your API key in the <code>Authorization</code> header:</p>
+        <pre><code>Authorization: Bearer mk_live_your_api_key_here</code></pre>
+        <p>You can generate and manage API keys from the <strong>Settings &rarr; API</strong> section of your Momentum dashboard. Keys are scoped to your account and inherit your account permissions. Never share your API key or commit it to version control.</p>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow prose">
+        <h2>Endpoints</h2>
+
+        <h3>Transcripts</h3>
+        <div class="spec-row"><span class="spec-key">GET /transcripts</span><span class="spec-value">List all transcripts. Supports pagination via <code>?page=</code> and <code>?per_page=</code> query parameters. Filter by date with <code>?after=</code> and <code>?before=</code>.</span></div>
+        <div class="spec-row"><span class="spec-key">GET /transcripts/:id</span><span class="spec-value">Retrieve a single transcript by ID. Returns the full transcript text, speaker labels, highlights, and metadata.</span></div>
+
+        <h3>Devices</h3>
+        <div class="spec-row"><span class="spec-key">GET /devices</span><span class="spec-value">List all devices associated with your account. Returns device type, firmware version, battery level, and last sync time.</span></div>
+        <div class="spec-row"><span class="spec-key">POST /devices/:id/config</span><span class="spec-value">Update configuration for a specific device. Accepts JSON body with settings such as <code>recording_quality</code>, <code>auto_sync</code>, and <code>led_brightness</code>.</span></div>
+
+        <h3>Webhooks</h3>
+        <div class="spec-row"><span class="spec-key">GET /webhooks</span><span class="spec-value">List all registered webhook endpoints for your account.</span></div>
+        <div class="spec-row"><span class="spec-key">POST /webhooks</span><span class="spec-value">Register a new webhook endpoint. Accepts <code>url</code> and <code>events</code> array (e.g., <code>["transcript.completed", "device.synced"]</code>).</span></div>
+        <div class="spec-row"><span class="spec-key">DELETE /webhooks/:id</span><span class="spec-value">Remove a registered webhook endpoint by ID.</span></div>
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow prose">
+        <h2>Example Request</h2>
+        <pre><code>curl -X GET https://api.momentum.dev/v1/transcripts \
+  -H "Authorization: Bearer mk_live_your_api_key_here" \
+  -H "Content-Type: application/json"</code></pre>
+        <p>Response:</p>
+        <pre><code>{
+  "data": [
+    {
+      "id": "tr_abc123",
+      "title": "Product sync &mdash; March 14",
+      "duration_seconds": 2340,
+      "speakers": ["Alice", "Bob", "Carol"],
+      "highlights_count": 7,
+      "created_at": "2026-03-14T10:30:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 142
+  }
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow prose">
+        <h2>Rate Limits</h2>
+        <p>The API allows up to <strong>1,000 requests per minute</strong> per API key. If you exceed this limit, requests will return a <code>429 Too Many Requests</code> response with a <code>Retry-After</code> header indicating how many seconds to wait before retrying.</p>
+        <p>For high-volume use cases, contact our team about enterprise rate limits.</p>
+      </div>
+    </section>
+
+    <section class="section section-cream reveal">
+      <div class="container container-narrow prose">
+        <h2>SDKs</h2>
+        <p>We maintain official SDKs for the most popular languages. Each SDK handles authentication, pagination, error handling, and retries out of the box.</p>
+        <div class="card-grid-3">
+          <div class="info-card">
+            <h3>Python</h3>
+            <pre><code>pip install momentum-sdk</code></pre>
+            <p>Full-featured SDK with async support. Python 3.9+.</p>
+          </div>
+          <div class="info-card">
+            <h3>Node.js</h3>
+            <pre><code>npm install @momentum/sdk</code></pre>
+            <p>TypeScript-first SDK with ESM and CJS builds. Node 18+.</p>
+          </div>
+          <div class="info-card">
+            <h3>Go</h3>
+            <pre><code>go get momentum.dev/sdk</code></pre>
+            <p>Idiomatic Go client with context support. Go 1.21+.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container container-narrow">
+        <div class="cta-banner">
+          <h2>Start building</h2>
+          <p>Generate your API key in the dashboard and make your first request in minutes. If you need help, our developer support team is here for you.</p>
+          <a href="#" class="btn btn-primary">Get Your API Key</a>
+          <a href="docs.html" class="btn btn-secondary">Read the Docs</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="shared-footer"></div>
+  <script src="../shared.js"></script>
+</body>
+</html>
