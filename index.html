@@ -7,7 +7,7 @@
   <meta name="description" content="Momentum builds calm recording hardware that connects to your existing AI notetaking tools. Personal and conference-room devices in warm-sand aluminum with gesture controls and NFC.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -26,7 +26,7 @@
       --white-warm: #FAF7F3;
       --green-muted: #7A9A5C;
 
-      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
       --font-body: 'DM Sans', system-ui, sans-serif;
       --fs-hero: clamp(2.8rem, 5.5vw, 4.5rem);
       --fs-h2: clamp(2rem, 3.5vw, 3rem);
@@ -188,60 +188,88 @@
 
     /* ─── Hero ─── */
     .hero {
-      padding-top: 140px; padding-bottom: 80px;
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
       text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(59,53,48,0.52) 0%,
+        rgba(59,53,48,0.38) 40%,
+        rgba(59,53,48,0.55) 100%
+      );
+    }
+    .hero .container {
+      position: relative; z-index: 1;
+      padding-top: 100px; padding-bottom: 80px;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.4rem 1rem; border-radius: 100px;
-      background: var(--amber-dim); color: var(--amber);
+      background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9);
       font-size: var(--fs-xs); font-weight: 500;
       letter-spacing: 0.04em; margin-bottom: 2rem;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     .hero-badge::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--amber); animation: led 3s infinite;
+      background: var(--amber-soft); animation: led 3s infinite;
     }
     .hero h1 {
       font-family: var(--font-display); font-size: var(--fs-hero);
-      font-weight: 400; line-height: 1.12;
+      font-weight: 500; line-height: 1.12;
+      letter-spacing: -0.02em;
       max-width: 780px; margin: 0 auto 1.5rem;
+      color: #FFFFFF;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.15);
     }
     .hero-sub {
-      font-size: var(--fs-body-lg); color: var(--charcoal-light);
+      font-size: var(--fs-body-lg); color: rgba(255,255,255,0.82);
       font-weight: 350; max-width: 540px; margin: 0 auto 2.5rem;
       line-height: 1.7;
     }
     .hero-actions {
       display: flex; gap: 1rem; justify-content: center;
-      flex-wrap: wrap; margin-bottom: 3.5rem;
+      flex-wrap: wrap; margin-bottom: 0;
+    }
+    .hero-actions .btn-secondary {
+      color: rgba(255,255,255,0.9);
+      border-color: rgba(255,255,255,0.3);
+    }
+    .hero-actions .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.5);
     }
 
-    .hero-image {
-      max-width: 960px; margin: 0 auto;
-      border-radius: 24px; overflow: hidden;
-      aspect-ratio: 16/9;
-      background: linear-gradient(145deg, #E2D1B8 0%, #D4BC96 40%, #C9AE85 70%, #D6C4A4 100%);
-      box-shadow: 0 24px 64px rgba(59,53,48,0.1), 0 4px 16px rgba(59,53,48,0.04);
-      position: relative;
-    }
-    .hero-image img, .cover-img {
+    .cover-img {
       width: 100%; height: 100%; object-fit: cover; display: block;
     }
 
     .hero-stats {
       display: flex; justify-content: center; gap: 4rem;
-      margin-top: 3rem; flex-wrap: wrap;
+      margin-top: 3.5rem; flex-wrap: wrap;
     }
     .hero-stat {
       text-align: center;
     }
     .hero-stat-number {
       font-family: var(--font-display); font-size: 2rem;
-      color: var(--warm-charcoal);
+      color: #FFFFFF;
     }
     .hero-stat-label {
-      font-size: var(--fs-xs); color: var(--charcoal-muted);
+      font-size: var(--fs-xs); color: rgba(255,255,255,0.55);
       letter-spacing: 0.04em; margin-top: 0.2rem;
     }
 
@@ -284,7 +312,8 @@
     }
     .section-title {
       font-family: var(--font-display); font-size: var(--fs-h2);
-      font-weight: 400; line-height: 1.2;
+      font-weight: 500; line-height: 1.2;
+      letter-spacing: -0.02em;
       margin-bottom: 1rem;
     }
     .section-desc {
@@ -847,8 +876,8 @@
       .specs-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
       .testimonials-grid { grid-template-columns: 1fr; }
+      .hero { min-height: 85vh; }
       .hero-stats { gap: 2rem; }
-      .hero-image { aspect-ratio: 4/3; }
       .cta-form { flex-direction: column; }
       .cta-banner { padding: 3.5rem 1.5rem; border-radius: 20px; }
       .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -902,6 +931,9 @@
 
 <!-- ─── Hero ─── -->
 <section class="hero">
+  <div class="hero-bg">
+    <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" loading="eager">
+  </div>
   <div class="container">
     <div class="hero-badge reveal">Now accepting early access applications</div>
     <h1 class="reveal">Ambient recording hardware that disappears</h1>
@@ -909,9 +941,6 @@
     <div class="hero-actions reveal">
       <a href="#waitlist" class="btn btn-primary btn-lg">Join the Waitlist</a>
       <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
-    </div>
-    <div class="hero-image reveal">
-      <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" class="cover-img" loading="eager">
     </div>
     <div class="hero-stats reveal">
       <div class="hero-stat">
