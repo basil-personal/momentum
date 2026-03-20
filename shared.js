@@ -42,7 +42,7 @@
       <div class="footer-top">
         <div class="footer-brand-col">
           <div class="footer-brand-name">Momentum<span>.</span></div>
-          <p class="footer-brand-desc">Calm recording hardware that connects to your existing AI notetaking tools. Designed in San Francisco. Assembled with care.</p>
+          <p class="footer-brand-desc">Calm recording hardware that connects to your existing AI notetaking tools. Designed in New York City. Assembled with care.</p>
           <div class="footer-social">
             <a href="#" aria-label="Twitter">X</a>
             <a href="#" aria-label="LinkedIn">in</a>
@@ -58,55 +58,32 @@
             <li><a href="${PATH}products/app.html">Mobile App</a></li>
             <li><a href="${PATH}products/compare.html">Compare Devices</a></li>
             <li><a href="${PATH}products/accessories.html">Accessories</a></li>
-            <li><a href="${PATH}index.html#specs">Technical Specs</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Solutions</h4>
-          <ul>
-            <li><a href="${PATH}solutions/enterprise.html">For Enterprise</a></li>
-            <li><a href="${PATH}solutions/startups.html">For Startups</a></li>
-            <li><a href="${PATH}solutions/education.html">For Education</a></li>
-            <li><a href="${PATH}solutions/healthcare.html">For Healthcare</a></li>
-            <li><a href="${PATH}solutions/legal.html">For Legal</a></li>
-            <li><a href="${PATH}solutions/consultants.html">For Consultants</a></li>
-            <li><a href="${PATH}solutions/remote-teams.html">For Remote Teams</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Resources</h4>
           <ul>
             <li><a href="${PATH}resources/docs.html">Documentation</a></li>
-            <li><a href="${PATH}resources/api.html">API Reference</a></li>
-            <li><a href="${PATH}resources/help.html">Help Center</a></li>
-            <li><a href="${PATH}resources/blog.html">Blog</a></li>
-            <li><a href="${PATH}resources/changelog.html">Changelog <span class="badge">New</span></a></li>
-            <li><a href="${PATH}resources/status.html">System Status</a></li>
-            <li><a href="${PATH}resources/community.html">Community</a></li>
-            <li><a href="${PATH}resources/webinars.html">Webinars</a></li>
+            <li><a href="${PATH}resources/help.html">Help & Support</a></li>
+            <li><a href="${PATH}solutions/customer-stories.html">Customer Stories</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
           <ul>
-            <li><a href="${PATH}company/about.html">About</a></li>
             <li><a href="${PATH}company/careers.html">Careers <span class="badge">Hiring</span></a></li>
-            <li><a href="${PATH}company/press.html">Press Kit</a></li>
-            <li><a href="${PATH}company/contact.html">Contact</a></li>
-            <li><a href="${PATH}company/partners.html">Partners</a></li>
-            <li><a href="${PATH}company/investors.html">Investors</a></li>
+            <li><a href="${PATH}solutions/enterprise.html">Enterprise</a></li>
+            <li><a href="${PATH}legal/privacy.html">Privacy</a></li>
+            <li><a href="${PATH}legal/terms.html">Terms</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
         <div class="footer-bottom-left">&copy; 2026 Momentum Technologies, Inc. All rights reserved.</div>
         <div class="footer-bottom-right">
-          <a href="${PATH}legal/privacy.html">Privacy Policy</a>
-          <a href="${PATH}legal/terms.html">Terms of Service</a>
-          <a href="${PATH}legal/cookies.html">Cookie Policy</a>
+          <a href="${PATH}legal/privacy.html">Privacy</a>
+          <a href="${PATH}legal/terms.html">Terms</a>
           <a href="${PATH}legal/security.html">Security</a>
-          <a href="${PATH}legal/accessibility.html">Accessibility</a>
-          <a href="${PATH}legal/do-not-sell.html">Do Not Sell My Info</a>
         </div>
       </div>
     </div>

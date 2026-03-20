@@ -242,6 +242,12 @@
       color: #FFFFFF;
       text-shadow: 0 2px 20px rgba(0,0,0,0.15);
     }
+    .dissolve {
+      display: inline-block;
+      transition: filter 0.05s linear, opacity 0.05s linear;
+      will-change: filter, opacity;
+    }
+
     .hero-sub {
       font-size: var(--fs-body-lg); color: rgba(255,255,255,0.82);
       font-weight: 350; max-width: 540px; margin: 0 auto 2.5rem;
@@ -784,7 +790,7 @@
     }
     .footer-top {
       display: grid;
-      grid-template-columns: 2fr repeat(4, 1fr);
+      grid-template-columns: 2fr repeat(3, 1fr);
       gap: 3rem;
       padding-bottom: 4rem;
       border-bottom: 1px solid rgba(237,231,223,0.08);
@@ -944,8 +950,8 @@
       <img src="https://assets.lummi.ai/assets/QmUiAWYSLHDT1XTJanQ6uwe914Bhm98U9NkUywMQm2z3Pv" alt="People having a natural conversation at a table" loading="eager">
       <div class="hero-bg-content">
         <div class="hero-badge">Now accepting early access applications</div>
-        <h1>Ambient recording hardware that disappears</h1>
-        <p class="hero-sub">Beautifully crafted devices that capture every conversation and connect to the AI notetaking tools you already use. No setup. No attention. Just tap and go.</p>
+        <h1>Ambient recording hardware that <span class="dissolve" data-dissolve>disappears</span></h1>
+        <p class="hero-sub">Beautifully crafted devices that capture, transcribe, and summarize every conversation — with built-in AI or plugged into the tools you already use. No setup. No attention. Just tap and go.</p>
         <div class="hero-actions">
           <a href="#waitlist" class="btn btn-primary btn-lg">Join the Waitlist</a>
           <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
@@ -1070,8 +1076,8 @@
         <div class="feature-card-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="4" fill="none"/><path d="M15.5 8.5l2-2m-11 11l2-2m7 0l2 2M6.5 6.5l2 2"/></svg>
         </div>
-        <h3>Works with existing tools</h3>
-        <p>Connects directly to Otter, Granola, Quill, and more. Your transcripts flow into the apps you already use — no proprietary ecosystem to buy into.</p>
+        <h3>Built-in AI or bring your own</h3>
+        <p>Momentum handles transcription and summarization out of the box. Already use Otter, Granola, or Quill? Plug right in — your transcripts flow wherever you want them.</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-card-icon">
@@ -1325,8 +1331,8 @@
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">Integrations</span>
-      <h2 class="section-title">Works with everything you use</h2>
-      <p class="section-desc">Momentum connects to your existing stack. Transcripts flow automatically into your AI notetaking tools, communication platforms, and productivity apps.</p>
+      <h2 class="section-title">Built-in intelligence. Or bring your own.</h2>
+      <p class="section-desc">Momentum transcribes and summarizes every conversation with its own on-device AI. Already have tools you love? Transcripts flow automatically into your existing notetaking apps, communication platforms, and productivity stack.</p>
     </div>
     <div class="integrations-grid">
       <div class="integration-card reveal">
@@ -1620,7 +1626,7 @@
     <div class="footer-top">
       <div class="footer-brand-col">
         <div class="footer-brand-name">Momentum<span>.</span></div>
-        <p class="footer-brand-desc">Calm recording hardware that connects to your existing AI notetaking tools. Designed in San Francisco. Assembled with care.</p>
+        <p class="footer-brand-desc">Calm recording hardware with built-in transcription and summarization — or plug into the AI notetaking tools you already use. Designed in New York City.</p>
         <div class="footer-social">
           <a href="#" aria-label="Twitter">X</a>
           <a href="#" aria-label="LinkedIn">in</a>
@@ -1634,57 +1640,34 @@
           <li><a href="products/personal.html">Momentum Personal</a></li>
           <li><a href="products/conference.html">Momentum Conference</a></li>
           <li><a href="products/app.html">Mobile App</a></li>
-          <li><a href="#specs">Technical Specs</a></li>
-          <li><a href="products/accessories.html">Accessories</a></li>
           <li><a href="products/compare.html">Compare Devices</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Solutions</h4>
-        <ul>
-          <li><a href="solutions/enterprise.html">For Enterprise</a></li>
-          <li><a href="solutions/startups.html">For Startups</a></li>
-          <li><a href="solutions/education.html">For Education</a></li>
-          <li><a href="solutions/healthcare.html">For Healthcare</a></li>
-          <li><a href="solutions/legal.html">For Legal</a></li>
-          <li><a href="solutions/consultants.html">For Consultants</a></li>
-          <li><a href="solutions/remote-teams.html">For Remote Teams</a></li>
+          <li><a href="products/accessories.html">Accessories</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
           <li><a href="resources/docs.html">Documentation</a></li>
-          <li><a href="resources/api.html">API Reference</a></li>
-          <li><a href="resources/help.html">Help Center</a></li>
-          <li><a href="resources/blog.html">Blog</a></li>
-          <li><a href="resources/changelog.html">Changelog <span class="badge">New</span></a></li>
-          <li><a href="resources/status.html">System Status</a></li>
-          <li><a href="resources/community.html">Community</a></li>
-          <li><a href="resources/webinars.html">Webinars</a></li>
+          <li><a href="resources/help.html">Help & Support</a></li>
+          <li><a href="solutions/customer-stories.html">Customer Stories</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="company/about.html">About</a></li>
           <li><a href="company/careers.html">Careers <span class="badge">Hiring</span></a></li>
-          <li><a href="company/press.html">Press Kit</a></li>
-          <li><a href="company/contact.html">Contact</a></li>
-          <li><a href="company/partners.html">Partners</a></li>
-          <li><a href="company/investors.html">Investors</a></li>
+          <li><a href="solutions/enterprise.html">Enterprise</a></li>
+          <li><a href="legal/privacy.html">Privacy</a></li>
+          <li><a href="legal/terms.html">Terms</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-left">&copy; 2026 Momentum Technologies, Inc. All rights reserved.</div>
       <div class="footer-bottom-right">
-        <a href="legal/privacy.html">Privacy Policy</a>
-        <a href="legal/terms.html">Terms of Service</a>
-        <a href="legal/cookies.html">Cookie Policy</a>
+        <a href="legal/privacy.html">Privacy</a>
+        <a href="legal/terms.html">Terms</a>
         <a href="legal/security.html">Security</a>
-        <a href="legal/accessibility.html">Accessibility</a>
-        <a href="legal/do-not-sell.html">Do Not Sell My Info</a>
       </div>
     </div>
   </div>
@@ -1706,13 +1689,23 @@
     else obs.observe(el);
   });
 
-  // Nav scroll
+  // Nav scroll + dissolve effect
   const nav = document.getElementById('nav');
+  const dissolveEl = document.querySelector('[data-dissolve]');
+  const heroSection = document.querySelector('.hero');
   let t = false;
   window.addEventListener('scroll', () => {
     if (!t) {
       requestAnimationFrame(() => {
         nav.classList.toggle('scrolled', window.scrollY > 60);
+        if (dissolveEl && heroSection && !reduced) {
+          const heroRect = heroSection.getBoundingClientRect();
+          const heroH = heroRect.height;
+          const scrolled = -heroRect.top;
+          const progress = Math.max(0, Math.min(1, scrolled / (heroH * 0.5)));
+          dissolveEl.style.filter = `blur(${progress * 18}px)`;
+          dissolveEl.style.opacity = 1 - progress * 0.85;
+        }
         t = false;
       });
       t = true;
